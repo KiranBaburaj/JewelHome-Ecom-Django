@@ -83,6 +83,6 @@ def update_category_discount(sender, instance, created, **kwargs):
         category.save()
         
         # Update related products
-        products = category.products.all()
+        products = Products.objects.filter(Category=category)
         for product in products:
             product.save()

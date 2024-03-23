@@ -37,6 +37,8 @@ class Products(models.Model):  # Use PascalCase for model names
         self.daily_rate = DailyRate.objects.order_by('date').last()
         self.price=(self.daily_rate.rate*(self.weight+(self.making_charge*self.weight)/100))
         product_offers = self.offers.filter(start_date__lte=date.today(), end_date__gte=date.today())
+        product_discount=0
+        category_discount=0
         if product_offers.exists():
             product_discount = sum(offer.discount_percentage for offer in product_offers)
     
