@@ -15,7 +15,7 @@
         {% for offer in product_offers %}
             <li>{{ offer.name }} - {{ offer.discount }}% Discount
   
-                <a href="{% url 'product_offer_edit' offer.id %}">Edit</a> <!-- Link to edit offer -->
+                <a href="{% url 'product_offer_delete' offer.id %}">delete</a> <!-- Link to edit offer -->
                 <a href="{% url 'product_offer_edit' offer.id %}">View</a> <!-- Link to view offer -->
             </li>
         {% empty %}

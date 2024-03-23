@@ -629,6 +629,16 @@ def generate_sales_report_data(period, start_date=None, end_date=None):
 
     }
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponseBadRequest
+from django.shortcuts import render
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponseBadRequest
+from django.shortcuts import render
+from django.shortcuts import render
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def sales_report(request, period=None):
     if request.method == 'POST':
@@ -637,14 +647,21 @@ def sales_report(request, period=None):
         end_date = request.POST.get('end_date')
         try:
             context = generate_sales_report_data(period, start_date, end_date)
-            return render(request, 'admin/sales_report.html', context)
+            sales_data = context.get('sales_data', [])
         except ValueError as e:
             return HttpResponseBadRequest(str(e))
     else:
         if period not in ['daily', 'weekly', 'monthly', 'yearly', 'custom']:
             period = 'daily'
         context = generate_sales_report_data(period)
-        return render(request, 'admin/sales_report.html', context)
+        sales_data = context.get('sales_data', [])
+   
+    return render(request, 'admin/sales_report.html', context)
+
+
+
+
+
 
 def render_sales_report_pdf(report_data):
     html = render_to_string('sales_report_pdf.html', report_data)

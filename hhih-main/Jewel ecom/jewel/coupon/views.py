@@ -69,10 +69,9 @@ def product_offer_edit(request, pk):
 
 def product_offer_delete(request, pk):
     offer = get_object_or_404(ProductOffers, pk=pk)
-    if request.method == 'POST':
-        offer.delete()
-        return redirect('product_offers_list')  # Change 'admin_homepage' to the appropriate URL
-    return render(request, 'admin/offers/product_offer_delete.html', {'offer': offer})
+    offer.delete()
+    return redirect('product_offers_list')  # Change 'admin_homepage' to the appropriate URL
+  
 
 def category_offer_create(request):
     if request.method == 'POST':
