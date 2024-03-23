@@ -9,9 +9,13 @@
 </head>
 <body>
     <h1>List Category Offers</h1>
-    <ul>
+    <ul>  <a href="{% url 'category_offer_create' %}">Create</a> 
         {% for offer in category_offers %}
-            <li>{{ offer.name }} - {{ offer.discount }}% Discount</li>
+            <li>{{ offer.name }} - {{ offer.discount }}% Discount
+
+                <a href="{% url 'category_offer_edit' offer.id %}">Edit</a> <!-- Link to edit offer -->
+                <a href="{% url 'category_offer_delete' offer.id %}">del</a> <!-- Link to view offer -->
+            </li>
         {% empty %}
             <li>No category offers available.</li>
         {% endfor %}

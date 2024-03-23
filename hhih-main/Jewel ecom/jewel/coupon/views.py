@@ -79,7 +79,7 @@ def category_offer_create(request):
         form = CategoryOfferForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('admin_homepage')  # Change 'admin_homepage' to the appropriate URL
+            return redirect('category_offers_list')  # Change 'admin_homepage' to the appropriate URL
     else:
         form = CategoryOfferForm()
     return render(request, 'admin/offers/category_offer_create.html', {'form': form})
@@ -97,10 +97,9 @@ def category_offer_edit(request, pk):
 
 def category_offer_delete(request, pk):
     offer = get_object_or_404(CategoryOffers, pk=pk)
-    if request.method == 'POST':
-        offer.delete()
-        return redirect('category_offers_list')  # Change 'admin_homepage' to the appropriate URL
-    return render(request, 'admin/offers/admin/category_offer_delete.html', {'offer': offer})
+    offer.delete()
+    return redirect('category_offers_list')  # Change 'admin_homepage' to the appropriate URL
+
 
 
 # views.py

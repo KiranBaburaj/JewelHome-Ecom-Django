@@ -2,6 +2,8 @@ from decimal import Decimal
 from django.db import models
 from user.models import User
 
+
+
 class Coupon(models.Model):
     # Existing fields
     code = models.CharField(max_length=20, unique=True)
@@ -61,3 +63,26 @@ class CategoryOffers(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+@receiver(post_save, sender=ProductOffers)
+def update_product_discount(sender, instance, created, **kwargs):
+    if created:
+        product = instance.product
+        product.save()
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from .models import CategoryOffers
+
+@receiver(post_save, sender=CategoryOffers)
+def update_category_discount(sender, instance, created, **kwargs):
+    if created:
+        category = instance.category
+        category.save()
+        
+        # Update related products
+        products = category.products.all()
+        for product in products:
+            product.save()
