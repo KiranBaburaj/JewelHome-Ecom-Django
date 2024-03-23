@@ -765,8 +765,7 @@ def checkout(request):
                             original_total_value += delivery_charge 
                             discounted_total += delivery_charge     
                 
-
-
+                
             # Check wallet balance
             if wallet.balance >= order_amount / 100:  # Convert order amount back to currency unit (INR)
                 # Deduct order amount from wallet balance
