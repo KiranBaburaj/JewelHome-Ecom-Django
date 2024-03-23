@@ -1,0 +1,11 @@
+
+{% extends 'admin/base.html' %}
+{% block content %}
+<h1>Create Category</h1>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Create Category</button>
+</form>
+{% endblock %}
+# ... (similar templates for other actions)

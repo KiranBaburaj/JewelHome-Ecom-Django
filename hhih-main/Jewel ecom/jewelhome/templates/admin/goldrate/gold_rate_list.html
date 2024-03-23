@@ -1,0 +1,20 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<h1>Gold Rate List</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Rate</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for rate in rates %}
+        <tr>
+            <td>{{ rate.date }}</td>
+            <td>{{ rate.rate }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

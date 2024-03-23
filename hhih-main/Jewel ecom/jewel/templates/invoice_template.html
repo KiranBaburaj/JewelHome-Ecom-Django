@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .invoice-details {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .invoice-left-details {
+            flex: 1;
+        }
+        .invoice-right-details {
+            flex: 1;
+            text-align: right;
+        }
+        .invoice-table {
+            width: 80%; /* Adjusted width */
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .invoice-table th,
+        .invoice-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .invoice-table th {
+            background-color: #f2f2f2;
+        }
+        .invoice-total {
+            font-weight: bold;
+            text-align: right;
+        }
+        .invoice-summary {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-header">
+        <h1>Tax Invoice</h1>
+    </div>
+    <div class="invoice-details">
+        <div class="invoice-left-details">
+            <p><strong>Order ID:</strong> {{ order.id }}</p>
+            <p><strong>User:</strong> {{ order.user.username }}</p>
+            <p><strong>Email:</strong> {{ order.user.email }}</p>
+            <p><strong>Shipping Address:</strong> {{ order.address.street_address }}, {{ order.address.city }}, {{ order.address.state }}, {{ order.address.postal_code }}, {{ order.address.country }}</p>
+            <p><strong>Status:</strong> {{ order.status }}</p>
+            <p><strong>Order Value after discount:</strong> {{ order.discounted_total }}</p>
+            {% if order.coupon_code %}
+                <p><strong>Coupon Applied:</strong> {{ order.coupon_code }}</p>
+                <p><strong>Discount:</strong> {{ order.coupon_discount }}</p>
+            {% else %}
+                <p><strong>Coupon Applied:</strong> No Coupon Applied</p>
+            {% endif %}
+        </div>
+        <div class="invoice-right-details">
+            <p><strong>Payment Status:</strong> {{ order.get_payment_status_display }}</p>
+            <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+            <h2>Payment Summary</h2>
+            <p><strong>Total:</strong> {{ order.total }}</p>
+            <p><strong>GST:</strong> {{ order.gst }}</p>
+            <!-- Add more payment summary details here -->
+        </div>
+    </div>
+    <table class="invoice-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Size</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.size.measurement }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.product.price }}</td>
+                    <td>{{ item.total_price }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="invoice-total">Total:</td>
+                <td>{{ order.total }}</td>
+            </tr>
+        </tfoot>
+    </table>
+</body>
+</html>

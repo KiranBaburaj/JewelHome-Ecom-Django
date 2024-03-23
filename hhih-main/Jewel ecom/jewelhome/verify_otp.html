@@ -1,0 +1,21 @@
+{% extends 'user/base.html' %}
+
+{% block content %}
+  <h2>Verify OTP</h2>
+  <p>Enter the OTP sent to your phone number.</p>
+
+  <form method="post" action="{% url 'verify_otp' %}">
+    {% csrf_token %}
+    
+    {{ form.otp.label_tag }} {{ form.otp }}
+    {{ form.phone_number.label_tag }} {{ form.phone_number }}
+
+    {% if form.errors %}
+      <p class="error">Invalid OTP or OTP has expired. Please try again.</p>
+    {% endif %}
+
+    <button type="submit">Verify OTP</button>
+  </form>
+
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+  <h2>Create Product</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+  
+    <table>
+      <tr>
+        <th>Name:</th>
+        <td>{{ product_form.name }}</td>
+      </tr>
+      <tr>
+        <th>Description:</th>
+        <td>{{ product_form.description }}</td>
+      </tr>
+      <tr>
+        <th>Price:</th>
+        <td>{{ product_form.price }}</td>
+      </tr>
+      <tr>
+        <th>Discount:</th>
+        <td>{{ product_form.discount }}</td>
+      </tr>
+      <tr>
+        <th>Weight:</th>
+        <td>{{ product_form.weight }}</td>
+      </tr>
+      <tr>
+        <th>Size:</th>
+        <td>{{ product_form.size }}</td>
+      </tr>
+      <tr>
+        <th>Making Charge:</th>
+        <td>{{ product_form.making_charge }}</td>
+      </tr>
+      <tr>
+        <th>Category:</th>
+        <td>{{ product_form.Category}}</td>
+      </tr>
+      
+      <!-- Add other fields as needed -->
+
+      {{ formset.management_form }}
+      {% for form in formset %}
+        <tr>
+          <td colspan="2">{{ form.as_table }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+
+    <br>
+    <button type="submit">Create Product</button>
+  </form>
+{% endblock %}
