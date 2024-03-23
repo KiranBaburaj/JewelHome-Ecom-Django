@@ -17,11 +17,10 @@
         </tr>
         <tr>
             <th>Image:</th>
-            <td> {% for image in product.images.all %}
-                <img src="{{ image.images.url }}" alt="Product Image" width="150" height="150">
-            {% endfor %}
-        </td>
-               
+            <td> 
+                {% for image in product.images.all %}
+                    <img src="{{ image.images.url }}" alt="Product Image" width="150" height="150">
+                {% endfor %}
             </td>
         </tr>
         <tr>
@@ -40,17 +39,29 @@
             <th>Weight:</th>
             <td>{{ product.weight }} grams</td>
         </tr>
-<tr><th>size and stock :</th>
-        <td>
-            {% for size in product.product_sizes.all %}
-            {{ size.measurement }} ({{size.stock}}),
-            {% endfor %}
-        </td>
-    </tr>
-       
+        <tr>
+            <th>Size and Stock:</th>
+            <td>
+                {% for size in product.product_sizes.all %}
+                    {{ size.measurement }} ({{size.stock}}),
+                {% endfor %}
+            </td>
+        </tr>
         <tr>
             <th>Making Charge:</th>
             <td>₹{{ product.making_charge }}</td>
+        </tr>
+        <tr>
+            <th>Product Offer Discount:</th>
+            <td>{{ product.offers.first.discount_percentage }}%</td>
+        </tr>
+        <tr>
+            <th>Category Offer Discount:</th>
+            <td>
+                {% for offer in product.Category.offers.all %}
+                    {{ offer.discount_percentage }}%,
+                {% endfor %}
+            </td>
         </tr>
         <tr>
             <th></th>

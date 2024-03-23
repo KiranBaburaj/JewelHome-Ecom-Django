@@ -46,8 +46,8 @@ class Products(models.Model):  # Use PascalCase for model names
         if category_offers.exists():
             category_discount = sum(offer.discount_percentage for offer in category_offers)
           
-        self.discount = self.discount + product_discount + category_discount
-        self.discprice=(self.daily_rate.rate*(self.weight+((self.making_charge-(self.making_charge*Decimal(self.discount/100)))*self.weight)/100))
+        discounts = self.discount + product_discount + category_discount
+        self.discprice=(self.daily_rate.rate*(self.weight+((self.making_charge-(self.making_charge*Decimal(discounts/100)))*self.weight)/100))
         self.GST=int((self.discprice*3)/100)
         self.MC=(self.daily_rate.rate*(self.making_charge*self.weight)/100)
         self.tot_price=int(self.discprice+self.GST)
