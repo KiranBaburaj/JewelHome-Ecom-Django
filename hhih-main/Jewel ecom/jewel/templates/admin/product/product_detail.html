@@ -53,14 +53,21 @@
         </tr>
         <tr>
             <th>Product Offer Discount:</th>
-            <td>{{ product.offers.first.discount_percentage }}%</td>
+            <td>{% if product_offer %}
+                <p>Product Offer Discount: {{ product_offer.discount_percentage }}%</p>
+            {% endif %}%</td>
         </tr>
         <tr>
             <th>Category Offer Discount:</th>
             <td>
-                {% for offer in product.Category.offers.all %}
-                    {{ offer.discount_percentage }}%,
-                {% endfor %}
+                {% if category_offers %}
+    <p>Category Offer Discounts:</p>
+    <ul>
+        
+            <li>{{ category_offers.discount_percentage }}%</li>
+ 
+    </ul>
+{% endif %}
             </td>
         </tr>
         <tr>

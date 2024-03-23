@@ -36,16 +36,15 @@ class Products(models.Model):  # Use PascalCase for model names
     def save(self, *args, **kwargs):
         self.daily_rate = DailyRate.objects.order_by('date').last()
         self.price=(self.daily_rate.rate*(self.weight+(self.making_charge*self.weight)/100))
-        product_offers = self.offers.filter(start_date__lte=date.today(), end_date__gte=date.today())
         product_discount=0
         category_discount=0
-        if product_offers.exists():
-            product_discount = sum(offer.discount_percentage for offer in product_offers)
+        if hasattr(self, 'offer'):
+            product_offer = self.offer
+            product_discount = product_offer.discount_percentage if product_offer else 0            
+        if hasattr(self.Category, 'offer'):
+            category_offer = self.Category.offer
+            category_discount = category_offer.discount_percentage if category_offer else 0
     
-        category_offers = self.Category.offers.filter(start_date__lte=date.today(), end_date__gte=date.today())
-        if category_offers.exists():
-            category_discount = sum(offer.discount_percentage for offer in category_offers)
-          
         discounts = self.discount + product_discount + category_discount
         self.discprice=(self.daily_rate.rate*(self.weight+((self.making_charge-(self.making_charge*Decimal(discounts/100)))*self.weight)/100))
         self.GST=int((self.discprice*3)/100)

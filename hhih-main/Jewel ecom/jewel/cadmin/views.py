@@ -276,15 +276,24 @@ def product_edit(request, pk):
         {'form': form, 'formset': formset, 'size_formset': size_formset, 'product': product}
     )
 
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
+from product.models import Products
+
+
 @never_cache
 @login_required(login_url='superuser_login')
 def product_detailad(request, product_pk):
     product = get_object_or_404(Products, pk=product_pk)
-    
 
+    product_offer = product.offer if hasattr(product, 'offer') else None
+    category_offers = product.Category.offer if hasattr(product.Category, 'offer') else None
+    
     context = {
         'product': product,
-        
+        'product_offer': product_offer,
+        'category_offers': category_offers,
         # Add other context variables as needed (e.g., related products, reviews)
     }
 

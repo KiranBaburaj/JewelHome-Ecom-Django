@@ -49,7 +49,7 @@ from product.models import Products,Category
 
 
 class ProductOffers(models.Model):
-    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='offers')
+    product = models.OneToOneField(Products, on_delete=models.CASCADE, related_name='offer')
     name = models.CharField(max_length=100, default="Default Offer Name")
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
     start_date = models.DateField()
@@ -57,7 +57,7 @@ class ProductOffers(models.Model):
 
 
 class CategoryOffers(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='offers')
+    category = models.OneToOneField(Category, on_delete=models.CASCADE, related_name='offer')
     name = models.CharField(max_length=100, default="Default Offer Name")  # Provide a default value
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
     start_date = models.DateField()
