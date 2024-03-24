@@ -297,6 +297,7 @@ class OrderItem(models.Model):
 
     def total_price(self):
         return self.original_price * self.quantity  # Use original_price for calculations
+    
 
     def save(self, *args, **kwargs):
         # Save the original price when the order item is created

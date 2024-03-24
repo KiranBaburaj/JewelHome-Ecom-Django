@@ -86,7 +86,7 @@ def send_otp_twilio(user):
 from django.contrib import messages
 from django.contrib import messages
 from django.contrib import messages
-from coupon.models import ReferralCoupon
+from coupon.models import CategoryOffers, ProductOffers, ReferralCoupon
 
 # views.py
 
@@ -399,16 +399,38 @@ def product_detail(request, product_id):
     ratings_reviews = Rating.objects.filter(product_id=product_id)
     average_rating = Rating.objects.filter(product=product).aggregate(avg_rating=Avg('rating'))['avg_rating']
 
-    # Retrieve and display the success message
-    success_message = messages.get_messages(request)
+    product_offers = ProductOffers.objects.filter(
+        product=product,
+        start_date__lte=timezone.now(),
+        end_date__gte=timezone.now()
+    )
+    disc = 0
+    if product_offers.exists():
+        disc = (product.MC/100) * product_offers[0].discount_percentage
 
+
+
+    
+    # Retrieve active category offers for the displayed product's category
+    category_offers = CategoryOffers.objects.filter(
+        category=product.Category,
+        start_date__lte=timezone.now(),
+        end_date__gte=timezone.now()
+    )
+
+    discc = 0
+    if category_offers.exists():
+        discc = product.MC/100 * category_offers[0].discount_percentage  # Assuming you only expect one offer
+
+    success_message = messages.get_messages(request)
+    tot=product.tot_price-(discc+disc )
 
     context = {
         'ratings_reviews': ratings_reviews,
         'product': product,
         'random_related_products': random_related_products,
         'success_message': success_message,
-        'average_rating': average_rating
+        'average_rating': average_rating,'disc':disc,'discc':discc,'tot':tot,
     }
 
     return render(request, 'user/product_detail.html', context)
@@ -536,6 +558,7 @@ def add_to_cart(request):
             cart, _ = Cart.objects.get_or_create(user=request.user)
 
             existing_item = CartItem.objects.filter(cart=cart, product=product, size=size).first()
+            
 
             if existing_item:
                 existing_item.quantity += quantity
@@ -708,11 +731,11 @@ def checkout(request):
     delivery_charge = 0  
     razor=0
 
-
     if request.method == 'POST':
         selected_address_id = request.POST.get('address')
         selected_address = Address.objects.get(id=selected_address_id)
         selected_coupon_code = request.POST.get('coupon_code', None)
+
 
         # Fetch wallet object associated with the user
         wallet = Wallet.objects.get(user=request.user)
@@ -720,13 +743,9 @@ def checkout(request):
 
         # Check if the cart has items before creating the order
         if user_cart.items.exists():
-            
-
             order_amount = int(user_cart.total_cart_value() * 100)  # Convert to paise
             original_total_value = order_amount
             discount=0
-
-
             # Apply coupon discount if a coupon is selected
             if selected_coupon_code:
                 coupon = Coupon.objects.filter(
@@ -785,16 +804,11 @@ def checkout(request):
                 order_amount = remaining_amount*100
 
                 payment_method = 'WalletandRazorpay'
-
-            
+           
             else :
                 wallets=0
                 payment_method = 'Razorpay'
                 razor=order_amount/100
-
-                
-
-            
 
             razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
             razorpay_order = razorpay_client.order.create({

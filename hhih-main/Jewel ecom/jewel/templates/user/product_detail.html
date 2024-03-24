@@ -49,6 +49,9 @@
 
         <p><span style="font-weight: bold;">Daily Rate:</span> ₹{{ product.daily_rate.rate }}</p>
         <p><span style="font-weight: bold;">Total Price (incl GST):</span> ₹{{ product.tot_price }}</p>
+        <p><span style="font-weight: bold;">discRate:</span> ₹{{ disc }}</p>
+        <p><span style="font-weight: bold;">Todisctal </span> ₹{{ discc }}</p>
+        <p><span style="font-weight: bold;">Total Price (incl GST):</span> ₹{{ tot }}</p>
 
         <p><span style="font-weight: bold;">Available Sizes:</span>
            <form method="post" action="{% url 'add_to_cart' %}" class="mt-3" id="add-to-cart-form">

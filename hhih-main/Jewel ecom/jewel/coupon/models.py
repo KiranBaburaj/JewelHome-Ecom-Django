@@ -62,27 +62,3 @@ class CategoryOffers(models.Model):
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
     start_date = models.DateField()
     end_date = models.DateField()
-
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
-@receiver(post_save, sender=ProductOffers)
-def update_product_discount(sender, instance, created, **kwargs):
-    if created:
-        product = instance.product
-        product.save()
-
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from .models import CategoryOffers
-
-@receiver(post_save, sender=CategoryOffers)
-def update_category_discount(sender, instance, created, **kwargs):
-    if created:
-        category = instance.category
-        category.save()
-        
-        # Update related products
-        products = Products.objects.filter(Category=category)
-        for product in products:
-            product.save()
