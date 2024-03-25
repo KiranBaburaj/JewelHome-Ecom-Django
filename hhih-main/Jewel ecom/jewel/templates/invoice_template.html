@@ -15,18 +15,16 @@
         }
         .invoice-details {
             margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
+            display: table;
+            width: 100%;
         }
-        .invoice-left-details {
-            flex: 1;
-        }
-        .invoice-right-details {
-            flex: 1;
-            text-align: right;
+        .invoice-left-details, .invoice-right-details {
+            display: table-cell;
+            padding: 10px;
+            vertical-align: top;
         }
         .invoice-table {
-            width: 80%; /* Adjusted width */
+            width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
@@ -54,26 +52,71 @@
     </div>
     <div class="invoice-details">
         <div class="invoice-left-details">
-            <p><strong>Order ID:</strong> {{ order.id }}</p>
-            <p><strong>User:</strong> {{ order.user.username }}</p>
-            <p><strong>Email:</strong> {{ order.user.email }}</p>
-            <p><strong>Shipping Address:</strong> {{ order.address.street_address }}, {{ order.address.city }}, {{ order.address.state }}, {{ order.address.postal_code }}, {{ order.address.country }}</p>
-            <p><strong>Status:</strong> {{ order.status }}</p>
-            <p><strong>Order Value after discount:</strong> {{ order.discounted_total }}</p>
-            {% if order.coupon_code %}
-                <p><strong>Coupon Applied:</strong> {{ order.coupon_code }}</p>
-                <p><strong>Discount:</strong> {{ order.coupon_discount }}</p>
-            {% else %}
-                <p><strong>Coupon Applied:</strong> No Coupon Applied</p>
-            {% endif %}
+            <table>
+                <tr>
+                    <td><strong>Order ID:</strong></td>
+                    <td>{{ order.id }}</td>
+                </tr>
+                <tr>
+                    <td><strong>User:</strong></td>
+                    <td>{{ order.user.username }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Email:</strong></td>
+                    <td>{{ order.user.email }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Shipping Address:</strong></td>
+                    <td>{{ order.address.street_address }}, {{ order.address.city }}, {{ order.address.state }}, {{ order.address.postal_code }}, {{ order.address.country }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Status:</strong></td>
+                    <td>{{ order.status }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Order Value after discount:</strong></td>
+                    <td>{{ order.discounted_total }}</td>
+                </tr>
+                {% if order.coupon_code %}
+                    <tr>
+                        <td><strong>Coupon Applied:</strong></td>
+                        <td>{{ order.coupon_code }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Discount:</strong></td>
+                        <td>{{ order.coupon_discount }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td><strong>Coupon Applied:</strong></td>
+                        <td>No Coupon Applied</td>
+                    </tr>
+                {% endif %}
+            </table>
         </div>
         <div class="invoice-right-details">
-            <p><strong>Payment Status:</strong> {{ order.get_payment_status_display }}</p>
-            <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
-            <h2>Payment Summary</h2>
-            <p><strong>Total:</strong> {{ order.total }}</p>
-            <p><strong>GST:</strong> {{ order.gst }}</p>
-            <!-- Add more payment summary details here -->
+            <table>
+                <tr>
+                    <td><strong>Payment Status:</strong></td>
+                    <td>{{ order.get_payment_status_display }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Payment Method:</strong></td>
+                    <td>{{ order.get_payment_method_display }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><h2>Payment Summary</h2></td>
+                </tr>
+                <tr>
+                    <td><strong>Total:</strong></td>
+                    <td>{{ order.total_value }}</td>
+                </tr>
+                <tr>
+                    <td><strong>GST:</strong></td>
+                    <td>{{ gst | floatformat:2 }}</td>
+                    
+                <!-- Add more payment summary details here -->
+            </table>
         </div>
     </div>
     <table class="invoice-table">
@@ -82,7 +125,7 @@
                 <th>Product</th>
                 <th>Size</th>
                 <th>Quantity</th>
-                <th>Unit Price</th>
+
                 <th>Total Price</th>
             </tr>
         </thead>
@@ -92,17 +135,18 @@
                     <td>{{ item.product.name }}</td>
                     <td>{{ item.size.measurement }}</td>
                     <td>{{ item.quantity }}</td>
-                    <td>{{ item.product.price }}</td>
+                 
                     <td>{{ item.total_price }}</td>
                 </tr>
             {% endfor %}
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="4" class="invoice-total">Total:</td>
-                <td>{{ order.total }}</td>
+                <td colspan="2" class="invoice-total">Total:</td>
+                <td colspan="2">{{ order.total_value }}</td>
             </tr>
         </tfoot>
     </table>
+    
 </body>
 </html>

@@ -113,7 +113,10 @@
 
 
         <div class="mt-4">
-            <a href="{% url 'create_reason' order.id %}" class="btn btn-danger" >Cancel Order</a>
+
+
+    <a href="{% url 'generate_invoice_pdf' order.id %}" class="btn btn-primary">Download Invoice</a>
+
             <a href="{% url 'order_history' %}" class="btn btn-primary">Order History</a>
         </div>
         

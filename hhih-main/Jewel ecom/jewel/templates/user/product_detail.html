@@ -28,30 +28,77 @@
     <div class="col-md-6">
    
         <p><span style="color: #007bff; font-weight: bold;">{{ product.description }}</span></p>
-        <p><span style="font-weight: bold;">Base Price:</span> ₹{{ product.price }}</p>
+        <style>
+            td {
+                padding: 5px; /* Adjust the padding as needed */
+            }
+        </style>
+        
+        <table>
+            <tr>
+                <td><span style="font-weight: bold;">Base Price:</span></td>
+                <td>₹{{ product.price }}</td>
+            </tr>
+            {% if product.discount %}
+            <tr>
+                <td><span style="color: red; font-weight: bold;">Discount in Making Charge:</span></td>
+                <td>{{ product.discount }}%</td>
+            </tr>
+            <tr>
+                <td><span style="font-weight: bold;">Discounted Base Price:</span></td>
+                <td>₹{{ product.discprice }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td><span style="font-weight: bold;">Weight:</span></td>
+                <td>{{ product.weight }} Grams</td>
+            </tr>
+            <tr>
+                <td><span style="font-weight: bold;">Making Charge:</span></td>
+                <td>{{ product.making_charge }}%</td>
+            </tr>
+            <!-- Other product details -->
+            <tr>
+                <td><span style="font-weight: bold;">Rating:</span></td>
+                <td>
+                    {% if average_rating %}
+                    {{ average_rating }}/5
+                    {% else %}
+                    No ratings yet
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><span style="font-weight: bold;">Daily Rate:</span></td>
+                <td>₹{{ product.daily_rate.rate }}</td>
+            </tr>
+            <tr>
+                <td><span style="font-weight: bold;">Total Price (incl GST):</span></td>
+                <td>₹{{ product.tot_price }}</td>
+            </tr>
+            {% if disc > 0 %}
+            <tr>
+                <td><span style="font-weight: bold;">Product Offer Discount:</span></td>
+                <td>₹{{ disc }}</td>
+            </tr>
+            {% endif %}
+            {% if discc > 0 %}
+            <tr>
+                <td><span style="font-weight: bold;">Category Discount:</span></td>
+                <td>₹{{ discc }}</td>
+            </tr>
+            {% endif %}
+            {% if product.tot_price > tot %}
+            <tr>
+                <td><span style="font-weight: bold;">Total Price (After Discount):</span></td>
+                <td>₹{{ tot }}</td>
+            </tr>
+            {% endif %}
+        </table>
         
         
-        {% if product.discount %}
-            <p><span style="color: red; font-weight: bold;">Discount in making_charge:</span> {{ product.discount }}%</p>
-            <p><span style="font-weight: bold;">Discounted Base Price:</span> ₹{{ product.discprice }}</p>
-        {% endif %}
-
-        <p><span style="font-weight: bold;">Weight:</span> {{ product.weight }} Grams</p>
-        <p><span style="font-weight: bold;">Making Charge:</span> {{ product.making_charge }}%</p>
-        <!-- Other product details -->
-<p><span style="font-weight: bold;">Rating:</span> 
-    {% if average_rating %}
-        {{ average_rating }}/5
-    {% else %}
-        No ratings yet
-    {% endif %}
-</p>
-
-        <p><span style="font-weight: bold;">Daily Rate:</span> ₹{{ product.daily_rate.rate }}</p>
-        <p><span style="font-weight: bold;">Total Price (incl GST):</span> ₹{{ product.tot_price }}</p>
-        <p><span style="font-weight: bold;">discRate:</span> ₹{{ disc }}</p>
-        <p><span style="font-weight: bold;">Todisctal </span> ₹{{ discc }}</p>
-        <p><span style="font-weight: bold;">Total Price (incl GST):</span> ₹{{ tot }}</p>
+        
+        
 
         <p><span style="font-weight: bold;">Available Sizes:</span>
            <form method="post" action="{% url 'add_to_cart' %}" class="mt-3" id="add-to-cart-form">

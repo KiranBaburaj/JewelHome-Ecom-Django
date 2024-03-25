@@ -406,7 +406,7 @@ def product_detail(request, product_id):
     )
     disc = 0
     if product_offers.exists():
-        disc = (product.MC/100) * product_offers[0].discount_percentage
+        disc =round((product.MC * product_offers[0].discount_percentage) / 100, 2)
 
 
 
@@ -420,10 +420,10 @@ def product_detail(request, product_id):
 
     discc = 0
     if category_offers.exists():
-        discc = product.MC/100 * category_offers[0].discount_percentage  # Assuming you only expect one offer
+        discc = round(product.MC/100 * category_offers[0].discount_percentage ,2) # Assuming you only expect one offer
 
     success_message = messages.get_messages(request)
-    tot=product.tot_price-(discc+disc )
+    tot=round(product.tot_price-(discc+disc ),2)
 
     context = {
         'ratings_reviews': ratings_reviews,

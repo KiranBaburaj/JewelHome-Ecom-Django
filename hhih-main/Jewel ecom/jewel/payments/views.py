@@ -1,3 +1,4 @@
+from decimal import Decimal
 import html
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -174,13 +175,23 @@ from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 from xhtml2pdf import pisa  # Import the module from xhtml2pdf
+from decimal import Decimal
 
 def generate_invoice_pdf(request, order_id):
     # Fetch the order details and other necessary data
     order = Order.objects.get(id=order_id)
+    from decimal import Decimal
+
+    # Assuming order.total_value is a Decimal object
+    total_value = int(order.total_value())
+
+  # Convert the float to a Decimal before performing the division
+    gst = total_value - (total_value / 1.03)
+
+
     
     # Render the invoice HTML template with the order data
-    rendered_html = render_to_string('invoice_template.html', {'order': order})
+    rendered_html = render_to_string('invoice_template.html', {'order': order,'gst':gst})
     
     # Create an HttpResponse object with PDF content type
     response = HttpResponse(content_type='application/pdf')
