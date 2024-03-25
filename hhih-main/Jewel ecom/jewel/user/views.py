@@ -683,34 +683,33 @@ def search_products(request):
     form = SearchForm(request.GET)
     
     # Fetch all products initially
-    products = Products.objects.filter(is_active=True)
+    products = Products.objects.filter(is_active=True).annotate(avg_rating=Avg('rating__rating'))
 
 
     # Handle search query
     if form.is_valid():
         search_query = form.cleaned_data.get('search_query')
         if search_query:
-            products = products.filter(name__icontains=search_query)
+            products = products.annotate(avg_rating=Avg('rating__rating')).filter(name__icontains=search_query)
 
         sort_by = form.cleaned_data.get('sort_by')
         if sort_by == 'popularity':
-            products = products.order_by('-product_rating__rating')  # Assuming there's a related product_rating field
+            products = products.annotate(avg_rating=Avg('rating__rating')).order_by('-avg_rating')   # Assuming there's a related product_rating field
         elif sort_by == 'price_low_high':
-            products = products.order_by('price')
+            products = products.annotate(avg_rating=Avg('rating__rating')).order_by('price')
         elif sort_by == 'price_high_low':
-            products = products.order_by('-price')
+            products = products.annotate(avg_rating=Avg('rating__rating')).order_by('-price')
         elif sort_by == 'average_ratings':
-            products = products.annotate(avg_rating=Avg('rating__rating'))
-            products = products.order_by('avg_rating')
+            products = products.annotate(avg_rating=Avg('rating__rating')).order_by('-avg_rating')         
         elif sort_by == 'featured':
             # Add logic for featured sorting
-            pass
+            products = products.annotate(avg_rating=Avg('rating__rating')).order_by('-avg_rating') 
         elif sort_by == 'new_arrivals':
-            products = products.order_by('created_at')
+            products = products.annotate(avg_rating=Avg('rating__rating')).order_by('created_at')
         elif sort_by == 'a_to_z':
-            products = products.order_by('name')
+            products = products.annotate(avg_rating=Avg('rating__rating')).order_by('name')
         elif sort_by == 'z_to_a':
-            products = products.order_by('-name')
+            products = products.annotate(avg_rating=Avg('rating__rating')).order_by('-name')
         # Add more sorting options as needed
 
     context = {
