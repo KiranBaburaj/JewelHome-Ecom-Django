@@ -47,12 +47,18 @@
                 </li>
               {% endfor %}
             </ul>
+
           </div>
         {% else %}
           <p>No coupons available.</p>
         {% endif %}
 
+    
+
+
+
         <p class="total-cart-value">Total Cart Value: {{ user_cart.total_cart_value|floatformat:2 }}</p>
+        {% if user_cart.total_cart_value < 5000 %}     <p><strong>Delivery Charge:</strong>  100 </p>        {% endif %}
         <p><strong>Wallet Balance:</strong> {{ request.user.wallet.balance }}</p>
         <p id="balance-amount"></p> <!-- Dynamic balance amount will be displayed here -->
       </div>

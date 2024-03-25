@@ -52,7 +52,7 @@ class Cart(models.Model):
     
     def total_cart_value(self):
         # Calculate the total value of items in the cart
-        total_value = sum(item.total_price() for item in self.items.all())
+        total_value = round(sum(item.total_price() for item in self.items.all()),0)
         return total_value
     
 
@@ -85,13 +85,13 @@ class CartItem(models.Model):
 
 
     def total_price(self):
-        return self.offer_price * self.quantity
+        return round(self.offer_price * self.quantity,0)
 
 
     def save(self, *args, **kwargs):
         # Check if the selected quantity exceeds the maximum allowed per person
-        max_quantity_per_person = 5  # You can adjust this value
-        user_cart_items = CartItem.objects.filter(cart=self.cart, product=self.product)
+        max_quantity_per_person = 3  # You can adjust this value
+        user_cart_items = CartItem.objects.filter(cart=self.cart, product=self.product).exclude(pk=self.pk)
         total_quantity = sum(item.quantity for item in user_cart_items) + self.quantity
 
 

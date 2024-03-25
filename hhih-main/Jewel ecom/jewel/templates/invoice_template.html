@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tax Invoice</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -44,15 +45,34 @@
         .invoice-summary {
             margin-bottom: 20px;
         }
+        .authorized-signatory {
+            margin-top: 50px;
+            text-align: center;
+            font-style: italic;
+        }
+        .signature-line {
+            width: 50%;
+            border-top: 1px solid #000;
+            margin: 0 auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="invoice-header">
         <h1>Tax Invoice</h1>
+        <h2>JEWEL HOME </h2>
+        <p>Date: {{ order.created_at }}</p>
+        <p>GST Number: XXXXXXXXX</p>
     </div>
     <div class="invoice-details">
         <div class="invoice-left-details">
             <table>
+                <tr>
+                    <td><strong>Invoice Number:</strong></td>
+                    <td>GA{{ order.id }}</td>
+                </tr>
                 <tr>
                     <td><strong>Order ID:</strong></td>
                     <td>{{ order.id }}</td>
@@ -77,6 +97,12 @@
                     <td><strong>Order Value after discount:</strong></td>
                     <td>{{ order.discounted_total }}</td>
                 </tr>
+                {% if order.delivery_charge > 0 %}
+                <tr>
+                    <td><strong>Delivery charge:</strong></td>
+                    <td>{{ order.delivery_charge }}</td>
+                </tr>  {% endif %}
+
                 {% if order.coupon_code %}
                     <tr>
                         <td><strong>Coupon Applied:</strong></td>
@@ -147,6 +173,12 @@
             </tr>
         </tfoot>
     </table>
+    <div class="authorized-signatory">
+        <div class="signature-line"></div>
+        <p>Authorized Signatory:</p>
+        <p>JEWEL HOME</p>
+        <div class="signature-line"></div>
+    </div>
     
 </body>
 </html>

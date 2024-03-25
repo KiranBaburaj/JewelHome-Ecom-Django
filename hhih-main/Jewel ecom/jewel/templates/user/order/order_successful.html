@@ -41,6 +41,11 @@
               <th scope="row"> Order Value after discount:</th>
               <td>{{ order.discounted_total }}</td>
             </tr>
+            {% if order.delivery_charge > 0 %}
+            <tr>
+                <td><strong>Delivery charge:</strong></td>
+                <td>{{ order.delivery_charge }}</td>
+            </tr>  {% endif %}
             {% if order.coupon_code %}
               <tr>
                 <th scope="row">Coupon Applied:</th>

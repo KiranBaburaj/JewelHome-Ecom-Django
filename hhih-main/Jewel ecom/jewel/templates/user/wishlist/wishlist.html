@@ -15,7 +15,7 @@
         <tbody>
           {% for product in wishlist.products.all %}
             <tr>
-              <td>{{ product.name }}</td>
+              <td><a href="{% url 'product_detail' product_id=product.id %}">{{ product.name }}</a></td>
               <td><img src="{{ product.images.first.images.url }}" alt="{{ product.name }}" width="50" height="50"></td>
               <td>
                 <a href="{% url 'remove_from_wishlist' product.id %}" class="btn btn-danger">Remove</a>

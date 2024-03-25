@@ -406,7 +406,7 @@ def product_detail(request, product_id):
     )
     disc = 0
     if product_offers.exists():
-        disc =round((product.MC * product_offers[0].discount_percentage) / 100, 2)
+        disc =round((product.MC * product_offers[0].discount_percentage) / 100, 0)
 
 
 
@@ -420,10 +420,10 @@ def product_detail(request, product_id):
 
     discc = 0
     if category_offers.exists():
-        discc = round(product.MC/100 * category_offers[0].discount_percentage ,2) # Assuming you only expect one offer
+        discc = round(product.MC/100 * category_offers[0].discount_percentage ,0) # Assuming you only expect one offer
 
     success_message = messages.get_messages(request)
-    tot=round(product.tot_price-(discc+disc ),2)
+    tot=round(product.tot_price-(discc+disc ),0)
 
     context = {
         'ratings_reviews': ratings_reviews,
@@ -626,7 +626,7 @@ def view_cart(request):
     cart_items = user_cart.items.all()
     print(f"Cart Items: {cart_items}")
 
-    total_cart_value = user_cart.total_cart_value()
+    total_cart_value = round(user_cart.total_cart_value(),0)
 
     context = {
         'cart_items': cart_items,'total_cart_value': total_cart_value,
@@ -786,12 +786,12 @@ def checkout(request):
                 ).first()
                 if coupon:
                     order_amount /= 100  # Convert back to the original currency unit (INR)
-                    discounted_total = coupon.calculate_discounted_total(
+                    discounted_total =round( coupon.calculate_discounted_total(
                         coupon.discount_type,
                         order_amount,
                         coupon.discount_amount,
                         coupon.discount_percentage
-                    )
+                    ),0)
                     discount=int(user_cart.total_cart_value())-discounted_total
                     
                     # Update the order_amount with the discounted_total
@@ -806,7 +806,7 @@ def checkout(request):
                     # Set the discounted total in the correct unit (INR)
                     discounted_total = Decimal(discounted_total)
             else:
-                discounted_total = original_total_value/100
+                discounted_total =round( original_total_value/100,0)
                 if discounted_total < 5000 :
                             delivery_charge = 100
                             order_amount += delivery_charge*100
@@ -846,20 +846,19 @@ def checkout(request):
                 'receipt': f'order_{user_cart.id}',
             })
             razorpay_order_id = razorpay_order['id']
-
             # Create a new order
             new_order = Order.objects.create(
                 razorpay_order_id=razorpay_order_id,
                 user=request.user,
                 address=selected_address,
                 original_total_value=original_total_value,
-                discounted_total=discounted_total,
+                discounted_total=round(discounted_total,0),
                 payment_method=payment_method,
                 payment_status=payment_status,
                 wallet=wallets,razor=razor,
                 coupon_code=selected_coupon_code,
                 coupon_discount = discount,
-                delivery_charge=delivery_charge,
+                delivery_charge=round(delivery_charge,0),
 
             )
             
@@ -899,7 +898,7 @@ def checkout(request):
         'user_addresses': user_addresses,
         'user_cart': user_cart,
         'applicable_coupons': applicable_coupons,
-        'discounted_total': discounted_total,'total_cart_value' : total_cart_value ,
+        'discounted_total': discounted_total,'total_cart_value' : total_cart_value ,'delivery_charge':delivery_charge,
     }
 
     return render(request, 'user/order/checkout.html', context)
