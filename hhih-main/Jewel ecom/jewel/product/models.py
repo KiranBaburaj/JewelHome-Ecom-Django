@@ -32,6 +32,10 @@ class Products(models.Model):  # Use PascalCase for model names
     MC = models.DecimalField(max_digits=15, decimal_places=2,default=10) 
     discprice = models.DecimalField(max_digits=15, decimal_places=2,default=10)
 
+    def __str__(self):
+        return self.name
+    
+
 
     def save(self, *args, **kwargs):
         self.daily_rate = DailyRate.objects.order_by('date').last()

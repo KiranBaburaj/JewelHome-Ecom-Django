@@ -60,12 +60,14 @@ from django.db import models
 from django.utils import timezone
 from product.models import Products, Size
 from user.models import User
+
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
     size = models.ForeignKey(Size, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     updated_at = models.DateTimeField(auto_now=True)  # Set auto_now to True
+    offer_price = models.DecimalField(max_digits=15, decimal_places=2, default=0)  # New field for offer price
 
 
     def clean(self):
@@ -83,7 +85,7 @@ class CartItem(models.Model):
 
 
     def total_price(self):
-        return self.product.tot_price * self.quantity
+        return self.offer_price * self.quantity
 
 
     def save(self, *args, **kwargs):
@@ -301,8 +303,7 @@ class OrderItem(models.Model):
 
     def save(self, *args, **kwargs):
         # Save the original price when the order item is created
-        if not self.id:
-            self.original_price = self.product.tot_price
+        
 
         # Calculate the total price before saving
         total_price = self.total_price()

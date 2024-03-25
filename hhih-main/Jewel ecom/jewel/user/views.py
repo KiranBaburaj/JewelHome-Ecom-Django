@@ -555,9 +555,38 @@ def add_to_cart(request):
             product = get_object_or_404(Products, pk=product_id)
             size = get_object_or_404(Size, pk=size_id)
 
+            
+            product_offers = ProductOffers.objects.filter(
+                product=product,
+                start_date__lte=timezone.now(),
+                end_date__gte=timezone.now()
+                )
+            disc = 0
+            if product_offers.exists():
+                disc = (product.MC/100) * product_offers[0].discount_percentage
+
+
+
+    
+            # Retrieve active category offers for the displayed product's category
+            category_offers = CategoryOffers.objects.filter(
+                category=product.Category,
+                start_date__lte=timezone.now(),
+                end_date__gte=timezone.now()
+            )
+
+            discc = 0
+            if category_offers.exists():
+                discc = product.MC/100 * category_offers[0].discount_percentage  # Assuming you only expect one offer
+
+            
+            tot=product.tot_price-(discc+disc )
+
+
             cart, _ = Cart.objects.get_or_create(user=request.user)
 
             existing_item = CartItem.objects.filter(cart=cart, product=product, size=size).first()
+            
             
 
             if existing_item:
@@ -572,7 +601,7 @@ def add_to_cart(request):
                         cart=cart,
                         product=product,
                         size=size,
-                        quantity=quantity
+                        quantity=quantity,offer_price=tot,
                     )
                     messages.success(request, f"{quantity} {product.name} added to the cart.")
 
@@ -831,16 +860,17 @@ def checkout(request):
                 coupon_code=selected_coupon_code,
                 coupon_discount = discount,
                 delivery_charge=delivery_charge,
+
             )
             
-
             # Copy items from the user's cart to the order
             for cart_item in user_cart.items.all():
                 OrderItem.objects.create(
                     order=new_order,
                     product=cart_item.product,
                     size=cart_item.size,
-                    quantity=cart_item.quantity
+                    quantity=cart_item.quantity,
+                    original_price=cart_item.offer_price,
                 )
 
             # Clear the user's cart after creating the order
@@ -877,7 +907,7 @@ def checkout(request):
 def calculate_discounted_total(request):
     if request.method == 'GET' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         coupon_code = request.GET.get('coupon_code')
-        total_cart_value = int(request.GET.get('total_cart_value'))
+        total_cart_value = float(request.GET.get('total_cart_value'))
 
         print(f"Received coupon_code: {coupon_code}, total_cart_value: {total_cart_value}")
 

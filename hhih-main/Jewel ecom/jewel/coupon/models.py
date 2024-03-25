@@ -46,19 +46,18 @@ class ReferralCoupon(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 from product.models import Products,Category
-
+from django.core.validators import MaxValueValidator
 
 class ProductOffers(models.Model):
     product = models.OneToOneField(Products, on_delete=models.CASCADE, related_name='offer')
     name = models.CharField(max_length=100, default="Default Offer Name")
-    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, validators=[MaxValueValidator(50)])
     start_date = models.DateField()
     end_date = models.DateField()
-
 
 class CategoryOffers(models.Model):
     category = models.OneToOneField(Category, on_delete=models.CASCADE, related_name='offer')
     name = models.CharField(max_length=100, default="Default Offer Name")  # Provide a default value
-    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2 ,validators=[MaxValueValidator(50)])
     start_date = models.DateField()
     end_date = models.DateField()
