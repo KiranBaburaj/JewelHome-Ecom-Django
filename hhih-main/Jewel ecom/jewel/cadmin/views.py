@@ -1,32 +1,17 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login as adlogin
 from django.contrib.auth import authenticate, logout as adlogout
-from django.shortcuts import render, redirect
-
-from django.shortcuts import render, get_object_or_404
-
 from django.shortcuts import render, get_object_or_404, redirect
-
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from user.models import Order, User
-
-
 from .forms import RegisterUser,EditForm,DailyRateForm, SizeForm, SizeFormSet
 from django.contrib import messages
 from product.models import Products, Size
-
 from .forms import ProductForm
-
-
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required  # Assuming login is required
-
-
 from .forms import ProductForm, ImageForm
 from django.forms import inlineformset_factory
-
-
 
 
 @never_cache
@@ -49,11 +34,6 @@ def superuser_login(request):
         return render(request, 'admin/superuser_login.html')
 
 
-
-
-
-
-
 @login_required(login_url='superuser_login')  # Apply login_required if needed
 def create_user(request):
     if request.method == "POST":
@@ -69,8 +49,6 @@ def create_user(request):
     return render(request, "create_user.html", {'form': form})
 
 
-
-
 @never_cache
 @login_required(login_url='superuser_login')
 def user_list(request):
@@ -79,7 +57,6 @@ def user_list(request):
     return render(request, 'admin/userdetail/user_list.html', context)
 
     
-
 @never_cache
 @login_required(login_url='superuser_login')
 def search_users(request):
@@ -93,8 +70,6 @@ def search_users(request):
 
     context = {'users': users}
     return render(request, 'admin/userdetail/user_list.html', context)
-
-
 
 
 @never_cache
@@ -150,8 +125,6 @@ def unblock_user(request, user_id):
     user.is_active = True
     user.save()
     return redirect('user_list')
-
-
 
 
 @never_cache
@@ -247,7 +220,6 @@ def create_product(request):
 
 
 
-
 @never_cache
 @login_required(login_url='superuser_login')
 def product_edit(request, pk):
@@ -300,11 +272,6 @@ def product_detailad(request, product_pk):
     return render(request, 'admin/product/product_detail.html', context)
 
 from django.shortcuts import render
-
-
-
-
-from django.shortcuts import render, redirect, get_object_or_404
 from product.models import Category,Image
 from .forms import CategoryForm  
 
@@ -399,7 +366,6 @@ def soft_delete_product(request, product_pk):
 
 
 
-from django.shortcuts import render, redirect
 from product.models import DailyRate
 from django.contrib.auth.decorators import login_required  # Assuming login is required
 
@@ -583,6 +549,8 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from django.db.models import Q
 
+
+
 def generate_sales_report_data(period, start_date=None, end_date=None):
     today = timezone.now().date()
     orders = Order.objects.none()
@@ -629,9 +597,7 @@ def generate_sales_report_data(period, start_date=None, end_date=None):
 
     }
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -639,6 +605,7 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 def sales_report(request, period=None):
     if request.method == 'POST':
@@ -729,29 +696,22 @@ def sales_report_excel(request, period=None):
 
 # views.py
 
-import os
-import matplotlib.pyplot as plt
-from datetime import datetime, timedelta
-import matplotlib
-matplotlib.use('Agg')  # Use Agg backend
+
 
 from django.shortcuts import render
 from datetime import datetime, timedelta
 import calendar
-import numpy as np
 import os
 from django.conf import settings
-from django.shortcuts import render
-
 from user.models import  OrderItem
 import plotly.graph_objs as go
-
 from django.shortcuts import render
 from django.db.models import Sum, Q
 from datetime import datetime, timedelta
 import calendar
 
-
+@never_cache
+@login_required(login_url='superuser_login')
 def custom_admin_homepage(request):
     # Define default filter period (monthly)
     filter_period = 'monthly'
