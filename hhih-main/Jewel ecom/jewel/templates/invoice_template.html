@@ -47,7 +47,7 @@
         }
         .authorized-signatory {
             margin-top: 50px;
-            text-align: center;
+            text-align: right;
             font-style: italic;
         }
         .signature-line {
@@ -93,53 +93,42 @@
                     <td><strong>Status:</strong></td>
                     <td>{{ order.status }}</td>
                 </tr>
+
+
+
+
+            </table>
+        </div><br>
+        <div class="invoice-right-details">
+            <table>
+
+                    <td colspan="2"><h2>Payment Summary</h2></td>
+                </tr>
                 <tr>
-                    <td><strong>Order Value after discount:</strong></td>
-                    <td>{{ order.discounted_total }}</td>
+                    <td><strong>Total (incl GST):</strong></td>
+                    <td>{{ order.total_value }}</td>
+                </tr>
+                <tr>
+                    <td><strong>GST:</strong></td>
+                    <td>{{ gst | floatformat:2 }}</td>
+
                 </tr>
                 {% if order.delivery_charge > 0 %}
                 <tr>
                     <td><strong>Delivery charge:</strong></td>
                     <td>{{ order.delivery_charge }}</td>
                 </tr>  {% endif %}
-
+                
                 {% if order.coupon_code %}
+
                     <tr>
-                        <td><strong>Coupon Applied:</strong></td>
-                        <td>{{ order.coupon_code }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Discount:</strong></td>
+                        <td><strong> coupon Discount:</strong></td>
                         <td>{{ order.coupon_discount }}</td>
                     </tr>
-                {% else %}
-                    <tr>
-                        <td><strong>Coupon Applied:</strong></td>
-                        <td>No Coupon Applied</td>
-                    </tr>
                 {% endif %}
-            </table>
-        </div>
-        <div class="invoice-right-details">
-            <table>
                 <tr>
-                    <td><strong>Payment Status:</strong></td>
-                    <td>{{ order.get_payment_status_display }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Payment Method:</strong></td>
-                    <td>{{ order.get_payment_method_display }}</td>
-                </tr>
-                <tr>
-                    <td colspan="2"><h2>Payment Summary</h2></td>
-                </tr>
-                <tr>
-                    <td><strong>Total:</strong></td>
-                    <td>{{ order.total_value }}</td>
-                </tr>
-                <tr>
-                    <td><strong>GST:</strong></td>
-                    <td>{{ gst | floatformat:2 }}</td>
+                    <td><strong>Order Value after discount:</strong></td>
+                    <td>{{ order.discounted_total }}</td>
                     
                 <!-- Add more payment summary details here -->
             </table>
@@ -175,7 +164,7 @@
     </table>
     <div class="authorized-signatory">
         <div class="signature-line"></div>
-        <p>Authorized Signatory:</p>
+        <p>Authorized Signatory:</p><br>
         <p>JEWEL HOME</p>
         <div class="signature-line"></div>
     </div>

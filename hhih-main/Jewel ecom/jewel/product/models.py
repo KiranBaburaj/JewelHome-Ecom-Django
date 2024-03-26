@@ -10,7 +10,6 @@ from django.dispatch import receiver
 
 
 
-
 # Create your models here.
 
 class Products(models.Model):  # Use PascalCase for model names
