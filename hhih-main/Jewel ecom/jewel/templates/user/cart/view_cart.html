@@ -38,14 +38,15 @@
           <td>{{ item.size.measurement }}</td>
           <td>
             <input type="number" name="quantity_{{ item.id }}" value="{{ item.quantity }}" min="1" max="{{ item.size.stock }}"
-              class="quantity-input" data-item-id="{{ item.id }}" onchange="this.form.submit()">
+            class="form-control quantity-input col-sm-6" data-item-id="{{ item.id }}" onchange="this.form.submit()">
             {% if item.quantity_error %}
             <span class="text-danger">{{ item.quantity_error }}</span>
             {% endif %}
           </td>
           <td id="item-price-{{ item.id }}">{{ item.total_price|floatformat:2 }}</td>
           <td>
-            <button type="button" class="delete-item" data-item-id="{{ item.id }}">Delete Item</button>
+            <button type="button" class="btn btn-danger delete-item" data-item-id="{{ item.id }}">Delete Item</button>
+
           </td>
         </tr>
         {% endfor %}

@@ -44,6 +44,14 @@
                   <th scope="row">Total Order Value after discount:</th>
                   <td>{{ order.discounted_total|floatformat:2 }}</td>
                 </tr>
+                {% if order.delivery_charge > 0 %}
+                <tr>
+                    <td><strong>Delivery charge:</strong></td>
+                    <td>{{ order.delivery_charge }}</td>
+                </tr>  {% endif %}
+
+
+
                 <tr>
                   <th scope="row">Payment Status:</th>
                   <td>{{ order.get_payment_status_display }}</td>
