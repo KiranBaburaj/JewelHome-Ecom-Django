@@ -124,11 +124,11 @@ from django import forms
 
 class SearchForm(forms.Form):
     search_query = forms.CharField(required=False)
-    sort_by_choices = [
+    sort_by_choices = [        ('average_ratings', 'Average Ratings'),
         ('popularity', 'Popularity'),
         ('price_low_high', 'Price: Low to High'),
         ('price_high_low', 'Price: High to Low'),
-        ('average_ratings', 'Average Ratings'),
+
         ('featured', 'Featured'),
         ('new_arrivals', 'New Arrivals'),
         ('a_to_z', 'A to Z'),

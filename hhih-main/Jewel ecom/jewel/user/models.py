@@ -285,8 +285,6 @@ from django.core.exceptions import ValidationError
 
 from product.models import Size, Products
 
-
-
 class OrderItem(models.Model):
     order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Products, on_delete=models.CASCADE)

@@ -115,7 +115,7 @@ def signup(request):
                         old_user = ReferralCoupon.objects.get(coupon_code=referral_coupon_code).user
                         old_user_wallet, _ = Wallet.objects.get_or_create(user=old_user)
                         old_user_ReferralCoupon = ReferralCoupon.objects.get(user=old_user)
-                        old_user_wallet.balance += 100
+                        old_user_wallet.add_funds(100)
                         # Increase the number of referrals made by the user
                         old_user_ReferralCoupon.referrals_made += 1
                         # Set the is_used status to true
@@ -388,8 +388,7 @@ def category_product_list(request, category_id):
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from product.models import Products
-from django.db.models import Avg
-
+from django.db.models import Avg,Sum
 
 
 def product_detail(request, product_id):
@@ -619,6 +618,7 @@ def add_to_cart(request):
 @login_required(login_url='signin')
 def view_cart(request):
     # Get the user's cart
+    
     user_cart = Cart.objects.get(user=request.user)
     print(f"User Cart: {user_cart}")
 
@@ -683,9 +683,8 @@ def search_products(request):
     form = SearchForm(request.GET)
     
     # Fetch all products initially
-    products = Products.objects.filter(is_active=True).annotate(avg_rating=Avg('rating__rating'))
-
-
+    products = Products.objects.filter(is_active=True).annotate(avg_rating=Avg('rating__rating')).order_by('-avg_rating')  
+    
     # Handle search query
     if form.is_valid():
         search_query = form.cleaned_data.get('search_query')
@@ -694,7 +693,7 @@ def search_products(request):
 
         sort_by = form.cleaned_data.get('sort_by')
         if sort_by == 'popularity':
-            products = products.annotate(avg_rating=Avg('rating__rating')).order_by('-avg_rating')   # Assuming there's a related product_rating field
+            products = products.annotate(total_quantity_sold=Sum('product_sizes__orderitem__quantity')).exclude(total_quantity_sold=None).order_by('-total_quantity_sold')  # Assuming there's a related product_rating field
         elif sort_by == 'price_low_high':
             products = products.annotate(avg_rating=Avg('rating__rating')).order_by('price')
         elif sort_by == 'price_high_low':
