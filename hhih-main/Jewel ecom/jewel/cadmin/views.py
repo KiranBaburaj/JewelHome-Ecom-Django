@@ -437,8 +437,6 @@ def banner_delete(request, pk):
 
 
 
-
-
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 @never_cache
@@ -594,7 +592,6 @@ def generate_sales_report_data(period, start_date=None, end_date=None):
         'total_coupons': total_coupons,
         'net_sales': net_sales,
         'orders': orders,'total_drop_sales':total_drop_sales
-
     }
 
 
@@ -628,8 +625,6 @@ def sales_report(request, period=None):
 
 
 
-
-
 def render_sales_report_pdf(report_data):
     html = render_to_string('sales_report_pdf.html', report_data)
     response = HttpResponse(content_type='application/pdf')
@@ -654,6 +649,8 @@ def render_sales_report_excel(report_data):
         ])
 
     return response
+
+    
 from django.shortcuts import redirect
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
@@ -694,9 +691,6 @@ def sales_report_excel(request, period=None):
     return render_sales_report_excel(report_data)
 
 
-# views.py
-
-
 
 from django.shortcuts import render
 from datetime import datetime, timedelta
@@ -710,6 +704,7 @@ from django.db.models import Sum, Q
 from datetime import datetime, timedelta
 import calendar
 
+
 @never_cache
 @login_required(login_url='superuser_login')
 def custom_admin_homepage(request):
@@ -720,8 +715,7 @@ def custom_admin_homepage(request):
 
     if 'period' in request.GET:
         filter_period = request.GET['period']
-    
-    # Calculate start and end dates based on filter period
+
     end_date = datetime.now().date()
     if filter_period == 'weekly':
         start_date = end_date - timedelta(days=7)

@@ -8,7 +8,7 @@
         {% for banner in banners %}
             <li>
                 <h3><a href="{% url 'banner_detail' pk=banner.pk %}">{{ banner.title }}</a></h3>
-                <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+                <img src="{{ banner.image.url }}" alt="{{ banner.title }}" style="max-width: 200px; max-height: 150px;">
                 <p>{{ banner.link }}</p>
             </li>
         {% endfor %}

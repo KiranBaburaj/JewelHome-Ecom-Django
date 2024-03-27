@@ -199,7 +199,7 @@
         {% for related_product in random_related_products %}
             <div class="col-md-4">
                 <div class="card">
-                    <img src="{{ related_product.images.first.images.url }}" class="card-img-top" alt="{{ related_product.name }}">
+                    <img src="{{ related_product.images.first.images.url }}" class="card-img-top" alt="{{ related_product.name }}" style="height: 300px; object-fit: cover;">
                     <div class="card-body">
                         <h5 class="card-title">{{ related_product.name }}</h5>
                         <p class="card-text"><span style="font-weight: bold;">Price:</span> ₹{{ related_product.price }}</p>

@@ -47,7 +47,8 @@
         {% for product in products %}
           <div class="col-md-4 mb-4">
             <div class="product card h-100">
-              <img src="{{ product.images.first.images.url }}" alt="{{ product.name }}" class="card-img-top">
+              <img src="{{ product.images.first.images.url }}" alt="{{ product.name }}" class="card-img-top" style="height: 300px; object-fit: cover;">
+
               <div class="card-body">
                 <h5 class="card-title" style="margin-bottom: 5px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                   {{ product.name }}
