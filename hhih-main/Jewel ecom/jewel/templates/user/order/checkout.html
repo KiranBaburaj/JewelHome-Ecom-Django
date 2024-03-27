@@ -31,7 +31,7 @@
           </tbody>
         </table>
 
-        <p><strong>Total cart value:</strong> {{ user_cart.total_cart_value|floatformat:2 }}</p>
+
 
         {% if applicable_coupons %}
           <h3>Apply Coupon</h3>
@@ -56,7 +56,7 @@
     
 
 
-
+        <p><strong>Total cart value:</strong> {{ user_cart.total_cart_value|floatformat:2 }}</p>
         <p class="total-cart-value">Total Cart Value: {{ user_cart.total_cart_value|floatformat:2 }}</p>
         {% if user_cart.total_cart_value < 5000 %}     <p><strong>Delivery Charge:</strong>  100 </p>        {% endif %}
         <p><strong>Wallet Balance:</strong> {{ request.user.wallet.balance }}</p>
