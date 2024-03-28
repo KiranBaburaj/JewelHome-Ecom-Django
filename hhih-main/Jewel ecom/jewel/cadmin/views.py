@@ -569,7 +569,7 @@ def generate_sales_report_data(period, start_date=None, end_date=None):
         # Check if start_date is before end_date
  
 
-    orders = Order.objects.filter(created_at__date__range=[start_date, end_date])
+    orders = Order.objects.filter(created_at__date__range=[start_date, end_date]).order_by('-created_at')
 
 
 

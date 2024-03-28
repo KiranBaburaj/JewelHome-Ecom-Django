@@ -158,7 +158,7 @@ from django.contrib import messages
 from payments.models import Transaction
 
 
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def wallet_transaction_history(request):
     # Retrieve the current user's wallet
@@ -168,7 +168,17 @@ def wallet_transaction_history(request):
     initial_balance = user_wallet.balance
     
     # Retrieve the wallet transaction history
-    transactions = Transaction.objects.filter(user=request.user).order_by('timestamp')
+    transactions = Transaction.objects.filter(user=request.user).order_by('-timestamp')
+    
+    # Pagination
+    page = request.GET.get('page', 1)
+    paginator = Paginator(transactions, 10)  # 10 transactions per page
+    try:
+        transactions = paginator.page(page)
+    except PageNotAnInteger:
+        transactions = paginator.page(1)
+    except EmptyPage:
+        transactions = paginator.page(paginator.num_pages)
     
     # Calculate the opening balance
     opening_balance = initial_balance
@@ -180,7 +190,7 @@ def wallet_transaction_history(request):
     
     # Render the template with the wallet transaction history, opening balance, and current balance
     return render(request, 'user/user/wallet_transaction.html', {'transactions': transactions, 'opening_balance': opening_balance, 'current_balance': user_wallet.balance})
- 
+
 
 def verify_otp(request):
     print("Entering verify_otp view")
