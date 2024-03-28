@@ -976,8 +976,19 @@ def return_order(request, order_id):
     return redirect('order_detail', order_id=order.id)
 
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def order_history(request):
-    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')  
+    # Pagination
+    page = request.GET.get('page', 1)
+    paginator = Paginator(orders, 10)  # 10 orders per page
+    try:
+        orders = paginator.page(page)
+    except PageNotAnInteger:
+        orders = paginator.page(1)
+    except EmptyPage:
+        orders = paginator.page(paginator.num_pages)
+    
     return render(request, 'user/order/order_history.html', {'orders': orders})
 
