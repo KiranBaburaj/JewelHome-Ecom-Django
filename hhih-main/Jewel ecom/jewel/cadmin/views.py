@@ -13,10 +13,24 @@ from django.contrib.auth.decorators import login_required  # Assuming login is r
 from .forms import ProductForm, ImageForm
 from django.forms import inlineformset_factory
 
+from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import redirect
+
+def superuser_required(view_func):
+    """
+    Decorator for views that checks whether a user is a superuser,
+    redirecting to the login page if necessary.
+    """
+    def _check_superuser(user):
+        return user.is_authenticated and user.is_superuser
+
+    return user_passes_test(_check_superuser, login_url='superuser_login')(view_func)
+
+
 
 @never_cache
 def superuser_login(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and request.user.is_superuser:
         return redirect('custom_admin_homepage')
     if request.method == 'POST':
         username = request.POST['username']
@@ -149,6 +163,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 @never_cache
+@superuser_required 
 @login_required(login_url='superuser_login')
 def products_list(request):
     # Assuming you have 10 products per page, adjust as needed
@@ -706,7 +721,7 @@ import calendar
 
 
 @never_cache
-@login_required(login_url='superuser_login')
+@superuser_required
 def custom_admin_homepage(request):
     # Define default filter period (monthly)
     filter_period = 'monthly'
