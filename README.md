@@ -10,9 +10,8 @@
 - [Usage](#usage)
 - [Folder Structure](#folder-structure)
 - [Recent Changes](#recent-changes)
-- [Future Enhancements](#future-enhancements)
 - [Contributing](#contributing)
-- [License](#license)
+
 
 ## Project Description
 
