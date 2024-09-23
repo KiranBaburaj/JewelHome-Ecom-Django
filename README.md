@@ -2,6 +2,8 @@
 
 **Jewel Home** is a full-stack e-commerce application designed to provide users with a seamless experience for browsing and purchasing jewelry online. The project is built using **Django** for the backend and **HTML/CSS** for the frontend, offering a user-friendly interface for both customers and administrators.
 
+The Project Live Link https://jewelhome.site/
+
 ## Table of Contents
 - [Project Description](#project-description)
 - [Features](#features)
