@@ -12,7 +12,7 @@ The Project Live Link https://jewelhome.site/
 - [Usage](#usage)
 - [Folder Structure](#folder-structure)
 - [Recent Changes](#recent-changes)
-- [Contributing](#contributing)
+
 
 
 ## Project Description
